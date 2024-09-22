@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Turnos</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task_button">Add task button</string>
+    <string name="search">Search</string>
+    <string name="open_receipts">Open receipts</string>
+    <string name="history">History</string>
+    <string name="no_pending_receipts">No pending receipts</string>
+    <string name="no_tasks">No tasks</string>
+    <string name="go_back">Go back</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="error_saving_task">Error saving task</string>
+</resources>
