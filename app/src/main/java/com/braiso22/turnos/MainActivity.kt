@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         taskList(navController)
                         editTask()
-                        taskDetail()
+                        taskDetail(navController)
                         addTask(navController)
                     }
                     navigation<ReceiptsScreenTab>(

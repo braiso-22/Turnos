@@ -32,9 +32,7 @@ class TaskRepositoryImpl(
                 Log.i(TAG, "Task save failed")
                 trySend(Resource.Error(it))
             }
-            awaitClose {
-                
-            }
+            awaitClose()
         }
     }
 

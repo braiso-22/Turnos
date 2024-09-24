@@ -11,4 +11,7 @@
     <string name="save">Save</string>
     <string name="name">Name</string>
     <string name="error_saving_task">Error saving task</string>
+    <string name="executions">Executions</string>
+    <string name="back">Back</string>
+    <string name="new_execution">New execution</string>
 </resources>
