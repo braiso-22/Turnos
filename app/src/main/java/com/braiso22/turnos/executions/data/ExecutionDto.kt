@@ -11,17 +11,15 @@ data class ExecutionDto(
     val taskId: String = "",
     @ServerTimestamp
     val date: Timestamp = Timestamp.now(),
-    val isConfirmed: Boolean = false,
+    val confirmed: Boolean = false,
 ) {
-    fun toDomain(): Execution {
-        return Execution(
-            id = id,
-            dateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-            isConfirmed = isConfirmed,
-            taskId = taskId,
-            userId = userId,
-        )
-    }
+    fun toDomain(): Execution = Execution(
+        id = id,
+        dateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+        isConfirmed = confirmed,
+        taskId = taskId,
+        userId = userId,
+    )
 }
 
 fun Execution.toDto(): ExecutionDto = ExecutionDto(
@@ -29,5 +27,5 @@ fun Execution.toDto(): ExecutionDto = ExecutionDto(
     userId = userId,
     taskId = taskId,
     date = Timestamp.now(),
-    isConfirmed = isConfirmed,
+    confirmed = isConfirmed,
 )
