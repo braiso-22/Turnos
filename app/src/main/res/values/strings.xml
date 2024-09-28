@@ -14,4 +14,16 @@
     <string name="executions">Executions</string>
     <string name="back">Back</string>
     <string name="new_execution">New execution</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="bad_credentials">Bad credentials</string>
+    <string name="clear_text">Clear text</string>
+    <string name="couldn_t_reach_server_check_your_internet_connection">Couldn\'t reach server, check your internet connection.</string>
+    <string name="register">Register</string>
+    <string name="could_t_register_with_this_email">Could\'t register with this email</string>
+    <string name="select_user">Select User</string>
+    <string name="select">Select</string>
+    <string name="user_name">Username</string>
+    <string name="select_other_username">Select other username</string>
 </resources>
