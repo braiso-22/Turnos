@@ -6,7 +6,7 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.time.ZoneId
 
 data class ExecutionDto(
-    val id: String? = null,
+    val id: String = "",
     val userId: String = "",
     val taskId: String = "",
     @ServerTimestamp

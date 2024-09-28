@@ -80,6 +80,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.androidx.hilt.compiler)
 
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

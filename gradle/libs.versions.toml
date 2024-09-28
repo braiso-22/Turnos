@@ -5,6 +5,7 @@ composeBom = "2024.09.02"
 composeUi = "1.7.1"
 coreKtx = "1.13.1"
 dagger = "2.51.1"
+datastore = "1.1.1"
 espressoCore = "3.6.1"
 firebaseBom = "33.3.0"
 hilt = "1.2.0"
@@ -20,6 +21,7 @@ serializable = "1.6.3"
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt" }

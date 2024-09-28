@@ -6,7 +6,7 @@ import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.executions.domain.Execution
 import com.braiso22.turnos.executions.domain.ExecutionsRepository
 import com.braiso22.turnos.executions.presentation.same_type.ExecutionUiState
-import com.braiso22.turnos.tasks.presentation.add.AddTaskViewModel.UiEvent
+import com.braiso22.turnos.users.domain.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(
     private val executionsRepository: ExecutionsRepository,
+    private val usersRepository: UserRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<List<ExecutionUiState>>(emptyList())
     val executions = _state.asStateFlow()
@@ -37,13 +38,15 @@ class TaskDetailViewModel @Inject constructor(
 
     fun onInit(id: String) {
         viewModelScope.launch {
+
             executionsRepository.getExecutionsByTaskIds(id).collect { executions ->
                 _state.update {
                     executions.map {
+                        val userName = usersRepository.getUserById(it.userId)?.userName ?: "user"
                         ExecutionUiState(
-                            id = it.id ?: "",
+                            id = it.id,
                             imageUrl = null,
-                            userName = it.userId,
+                            userName = userName,
                             date = it.dateTime.toLocalDate().toString(),
                             time = it.dateTime.toLocalTime().toString(),
                             isConfirmed = it.isConfirmed
@@ -58,7 +61,7 @@ class TaskDetailViewModel @Inject constructor(
         viewModelScope.launch {
             executionsRepository.saveExecution(
                 Execution(
-                    id = null,
+                    id = "",
                     dateTime = LocalDateTime.now(),
                     isConfirmed = false,
                     taskId = id,

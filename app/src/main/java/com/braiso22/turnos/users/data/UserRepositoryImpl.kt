@@ -2,12 +2,14 @@ package com.braiso22.turnos.users.data
 
 import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.common.USERS_COLLECTION
+import com.braiso22.turnos.users.domain.User
 import com.braiso22.turnos.users.domain.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class UserRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -51,6 +53,7 @@ class UserRepositoryImpl(
             email = email,
             username = username,
         )
+
         document.set(user).addOnSuccessListener {
             trySend(Resource.Success(Unit))
         }.addOnFailureListener {
@@ -58,5 +61,16 @@ class UserRepositoryImpl(
         }
 
         awaitClose { }
+    }
+
+
+    override suspend fun getUserById(id: String): User? {
+        return firestore.collection(USERS_COLLECTION)
+            .document(id)
+            .get()
+            .await()
+            .toObject(
+                UserDto::class.java
+            )?.toDomain()
     }
 }
