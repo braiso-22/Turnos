@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.braiso22.turnos.common.navigateWithoutBack
-import com.braiso22.turnos.receipts.presentation.open.OpenReceipts
+import com.braiso22.turnos.executions.presentation.open_executions.OpenReceipts
 import com.braiso22.turnos.tasks.presentation.add.AddTask
 import com.braiso22.turnos.executions.presentation.task_executions.TaskExecutions
 import com.braiso22.turnos.tasks.presentation.edit.EditTask

@@ -7,9 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.braiso22.turnos.receipts.presentation.history.receiptsHistory
-import com.braiso22.turnos.receipts.presentation.open.OpenReceipts
-import com.braiso22.turnos.receipts.presentation.open.openReceipts
+import com.braiso22.turnos.executions.presentation.executions_history.receiptsHistory
+import com.braiso22.turnos.executions.presentation.open_executions.OpenReceipts
+import com.braiso22.turnos.executions.presentation.open_executions.openReceipts
 import com.braiso22.turnos.tasks.presentation.add.addTask
 import com.braiso22.turnos.executions.presentation.task_executions.taskExecutions
 import com.braiso22.turnos.tasks.presentation.edit.editTask

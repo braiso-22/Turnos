@@ -1,4 +1,4 @@
-package com.braiso22.turnos.receipts.presentation.open
+package com.braiso22.turnos.executions.presentation.open_executions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.executions.domain.use_cases.ConfirmExecution
 import com.braiso22.turnos.executions.domain.use_cases.GetOpenExecutions
 import com.braiso22.turnos.executions.domain.use_cases.SyncExecutions
-import com.braiso22.turnos.receipts.presentation.open.components.ReceiptUiState
+import com.braiso22.turnos.executions.presentation.open_executions.components.ReceiptUiState
 import com.braiso22.turnos.users.domain.SyncUsers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

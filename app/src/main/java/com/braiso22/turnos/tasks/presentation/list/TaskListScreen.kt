@@ -148,7 +148,7 @@ fun TaskListScreenComponent(
                     },
                     label = {
                         Text(
-                            text = stringResource(R.string.open_receipts),
+                            text = stringResource(R.string.open_executions),
                             color = MaterialTheme.colorScheme.primary,
                         )
                     }

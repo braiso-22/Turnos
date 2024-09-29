@@ -3,7 +3,7 @@
     <string name="tasks">Tasks</string>
     <string name="add_task_button">Add task button</string>
     <string name="search">Search</string>
-    <string name="open_receipts">Open receipts</string>
+    <string name="open_executions">Open executions</string>
     <string name="history">History</string>
     <string name="no_pending_receipts">No pending receipts</string>
     <string name="no_tasks">No tasks</string>
@@ -30,4 +30,5 @@
     <string name="confirm">Confirm</string>
     <string name="edition_of_tasks_not_implemented">Edition of tasks not implemented</string>
     <string name="edit_task">Edit task</string>
+    <string name="not_implemented">Not implemented</string>
 </resources>

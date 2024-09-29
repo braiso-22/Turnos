@@ -1,9 +1,7 @@
 package com.braiso22.turnos.users
 
-import android.content.Context
-import androidx.room.Room
+import com.braiso22.turnos.di.AppDB
 import com.braiso22.turnos.users.data.UserRepositoryImpl
-import com.braiso22.turnos.users.data.local.room.UserDB
 import com.braiso22.turnos.users.data.local.room.UserDao
 import com.braiso22.turnos.users.data.net.api.AuthApi
 import com.braiso22.turnos.users.data.net.api.UserApi
@@ -19,7 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -29,17 +26,7 @@ object UsersModule {
 
     @Provides
     @Singleton
-    fun provideUserDatabase(
-        @ApplicationContext appContext: Context,
-    ): UserDB = Room.databaseBuilder(
-        appContext,
-        UserDB::class.java,
-        "users"
-    ).build()
-
-    @Provides
-    @Singleton
-    fun provideUserDao(db: UserDB): UserDao = db.userDao()
+    fun provideUserDao(db: AppDB): UserDao = db.userDao()
 
     @Provides
     @Singleton

@@ -1,17 +1,8 @@
-package com.braiso22.turnos.executions.data.local
+package com.braiso22.turnos.di
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import java.time.LocalDate
 import java.time.LocalDateTime
-
-@TypeConverters(DBConverters::class)
-@Database(entities = [ExecutionEntity::class], version = 1)
-abstract class ExecutionDB : RoomDatabase() {
-    abstract fun executionDao(): ExecutionDao
-}
 
 class DBConverters {
     // nullable

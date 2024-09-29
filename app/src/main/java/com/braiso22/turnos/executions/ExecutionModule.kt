@@ -1,11 +1,10 @@
 package com.braiso22.turnos.executions
 
 import android.content.Context
-import androidx.room.Room
+import com.braiso22.turnos.di.AppDB
 import com.braiso22.turnos.executions.data.ExecutionsRepositoryImpl
 import com.braiso22.turnos.executions.data.FirebaseApi
 import com.braiso22.turnos.executions.data.FirebaseApiImpl
-import com.braiso22.turnos.executions.data.local.ExecutionDB
 import com.braiso22.turnos.executions.data.local.ExecutionDao
 import com.braiso22.turnos.executions.domain.ExecutionsRepository
 import com.braiso22.turnos.executions.domain.use_cases.ConfirmExecution
@@ -31,18 +30,8 @@ object ExecutionModule {
 
     @Provides
     @Singleton
-    fun provideUserDatabase(
-        @ApplicationContext appContext: Context,
-    ): ExecutionDB = Room.databaseBuilder(
-        appContext,
-        ExecutionDB::class.java,
-        "executions"
-    ).build()
-
-    @Provides
-    @Singleton
     fun provideExecutionDao(
-        db: ExecutionDB,
+        db: AppDB,
     ): ExecutionDao = db.executionDao()
 
     @Provides

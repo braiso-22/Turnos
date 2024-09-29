@@ -1,4 +1,4 @@
-package com.braiso22.turnos.receipts.presentation.open
+package com.braiso22.turnos.executions.presentation.open_executions
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.braiso22.turnos.R
-import com.braiso22.turnos.receipts.presentation.open.components.ReceiptListComponent
-import com.braiso22.turnos.receipts.presentation.open.components.ReceiptUiState
-import com.braiso22.turnos.receipts.presentation.open.components.toUi
+import com.braiso22.turnos.executions.presentation.open_executions.components.ReceiptListComponent
+import com.braiso22.turnos.executions.presentation.open_executions.components.ReceiptUiState
+import com.braiso22.turnos.executions.presentation.open_executions.components.toUi
 import com.braiso22.turnos.ui.theme.TurnosTheme
 import java.time.LocalDate
 
@@ -82,7 +82,7 @@ fun OpenReceiptsScreenComponent(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.open_receipts),
+                        text = stringResource(R.string.open_executions),
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
@@ -129,7 +129,7 @@ fun OpenReceiptsScreenComponent(
                     },
                     label = {
                         Text(
-                            text = stringResource(R.string.open_receipts),
+                            text = stringResource(R.string.open_executions),
                             color = MaterialTheme.colorScheme.primary,
                         )
                     }

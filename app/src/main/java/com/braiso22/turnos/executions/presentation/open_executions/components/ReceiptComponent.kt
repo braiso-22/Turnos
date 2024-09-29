@@ -1,4 +1,4 @@
-package com.braiso22.turnos.receipts.presentation.open.components
+package com.braiso22.turnos.executions.presentation.open_executions.components
 
 
 import androidx.compose.foundation.layout.Arrangement
