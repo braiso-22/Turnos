@@ -1,76 +1,54 @@
 package com.braiso22.turnos.users.data
 
 import com.braiso22.turnos.common.Resource
-import com.braiso22.turnos.common.USERS_COLLECTION
+import com.braiso22.turnos.users.data.local.room.UserDao
+import com.braiso22.turnos.users.data.local.room.toEntity
+import com.braiso22.turnos.users.data.net.api.AuthApi
+import com.braiso22.turnos.users.data.net.api.UserApi
 import com.braiso22.turnos.users.domain.User
 import com.braiso22.turnos.users.domain.UserRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 
 class UserRepositoryImpl(
-    private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
+    private val authApi: AuthApi,
+    private val userApi: UserApi,
+    private val userDao: UserDao,
 ) : UserRepository {
-    override fun emailSignIn(email: String, password: String): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading())
+    override fun emailSignIn(
+        email: String,
+        password: String,
+    ): Flow<Resource<Unit>> = authApi.signIn(email, password)
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(Resource.Success(Unit))
-            } else {
-                trySend(Resource.Error(it.exception ?: Exception("Error on sign in")))
-            }
-        }
-        awaitClose { }
-    }
-
-    override fun emailLogin(email: String, password: String): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading())
-
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                trySend(Resource.Success(Unit))
-            } else {
-                trySend(Resource.Error(it.exception ?: Exception("Error on log in")))
-            }
-        }
-        awaitClose { }
-    }
+    override fun emailLogin(
+        email: String,
+        password: String,
+    ): Flow<Resource<Unit>> = authApi.login(email, password)
 
     override fun registerUser(
         email: String,
         username: String,
-    ): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading())
-        val document = firestore.collection(USERS_COLLECTION).document()
+    ): Flow<Resource<Unit>> = userApi.registerUser(email, username)
 
-        val user = UserDto(
-            id = document.id,
-            email = email,
-            username = username,
-        )
-
-        document.set(user).addOnSuccessListener {
-            trySend(Resource.Success(Unit))
-        }.addOnFailureListener {
-            trySend(Resource.Error(it))
-        }
-
-        awaitClose { }
+    override suspend fun getCurrentUser(): User? {
+        val email = getCurrentEmail() ?: ""
+        return userDao.getUserByEmail(email)?.toDomain()
     }
 
+    override suspend fun getCurrentEmail(): String? {
+        return authApi.getCurrentUserEmail()
+    }
+
+    override fun listenOnlineUsers(): Flow<List<User>> = userApi.listenOnlineUsers()
+
+    override suspend fun syncUsers(users: List<User>) {
+        userDao.insertAll(
+            users = users.map {
+                it.toEntity()
+            }
+        )
+    }
 
     override suspend fun getUserById(id: String): User? {
-        return firestore.collection(USERS_COLLECTION)
-            .document(id)
-            .get()
-            .await()
-            .toObject(
-                UserDto::class.java
-            )?.toDomain()
+        return userDao.getUserById(id)?.toDomain()
     }
 }

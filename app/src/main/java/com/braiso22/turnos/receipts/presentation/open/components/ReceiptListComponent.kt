@@ -49,7 +49,7 @@ fun ReceiptListComponent(
                         .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(date, style = MaterialTheme.typography.titleMedium)
+                    Text(date, style = MaterialTheme.typography.titleLarge)
                 }
             }
             items(receipts) { receipt ->

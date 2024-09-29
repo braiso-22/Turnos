@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Pending
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -106,7 +104,9 @@ fun TaskListScreenComponent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+
+            // TODO check if we need this button
+            /*FloatingActionButton(
                 onClick = {
                     onTaskEvent(TasksScreenEvent.OnClickNew)
                 }
@@ -115,7 +115,7 @@ fun TaskListScreenComponent(
                     imageVector = Icons.Default.Add,
                     contentDescription = stringResource(R.string.add_task_button)
                 )
-            }
+            }*/
         },
         bottomBar = {
             NavigationBar {

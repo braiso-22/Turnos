@@ -1,12 +1,14 @@
-package com.braiso22.turnos.tasks.presentation.detail
+package com.braiso22.turnos.executions.presentation.task_executions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.executions.domain.Execution
-import com.braiso22.turnos.executions.domain.ExecutionsRepository
-import com.braiso22.turnos.executions.presentation.same_type.ExecutionUiState
-import com.braiso22.turnos.users.domain.UserRepository
+import com.braiso22.turnos.executions.domain.use_cases.GetExecutionsByTaskId
+import com.braiso22.turnos.executions.domain.use_cases.SaveExecution
+import com.braiso22.turnos.executions.domain.use_cases.SyncExecutions
+import com.braiso22.turnos.executions.presentation.task_executions.components.ExecutionUiState
+import com.braiso22.turnos.users.domain.SyncUsers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +20,11 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskDetailViewModel @Inject constructor(
-    private val executionsRepository: ExecutionsRepository,
-    private val usersRepository: UserRepository,
+class TaskExecutionsViewModel @Inject constructor(
+    private val getExecutionsByTaskId: GetExecutionsByTaskId,
+    private val saveExecution: SaveExecution,
+    private val syncUsers: SyncUsers,
+    private val syncExecutions: SyncExecutions,
 ) : ViewModel() {
     private val _state = MutableStateFlow<List<ExecutionUiState>>(emptyList())
     val executions = _state.asStateFlow()
@@ -38,18 +42,22 @@ class TaskDetailViewModel @Inject constructor(
 
     fun onInit(id: String) {
         viewModelScope.launch {
-
-            executionsRepository.getExecutionsByTaskIds(id).collect { executions ->
+            syncUsers()
+        }
+        viewModelScope.launch {
+            syncExecutions()
+        }
+        viewModelScope.launch {
+            getExecutionsByTaskId(id).collect { executions ->
                 _state.update {
                     executions.map {
-                        val userName = usersRepository.getUserById(it.userId)?.userName ?: "user"
                         ExecutionUiState(
-                            id = it.id,
+                            id = it.execution.id,
                             imageUrl = null,
-                            userName = userName,
-                            date = it.dateTime.toLocalDate().toString(),
-                            time = it.dateTime.toLocalTime().toString(),
-                            isConfirmed = it.isConfirmed
+                            userName = it.user?.username ?: "",
+                            date = it.execution.dateTime.toLocalDate().toString(),
+                            time = it.execution.dateTime.toLocalTime().toString(),
+                            isConfirmed = it.execution.isConfirmed
                         )
                     }
                 }
@@ -59,13 +67,11 @@ class TaskDetailViewModel @Inject constructor(
 
     fun onClickNew(id: String) {
         viewModelScope.launch {
-            executionsRepository.saveExecution(
+            saveExecution(
                 Execution(
-                    id = "",
                     dateTime = LocalDateTime.now(),
                     isConfirmed = false,
                     taskId = id,
-                    userId = "test"
                 )
             ).collect { result ->
                 when (result) {
@@ -86,10 +92,15 @@ class TaskDetailViewModel @Inject constructor(
                         _isLoading.update {
                             false
                         }
-                        _eventFlow.emit(UiEvent.NavigateBack)
                     }
                 }
             }
+        }
+    }
+
+    fun clickBack(){
+        viewModelScope.launch {
+            _eventFlow.emit(UiEvent.NavigateBack)
         }
     }
 }

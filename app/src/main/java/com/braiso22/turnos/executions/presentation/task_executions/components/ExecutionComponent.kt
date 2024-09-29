@@ -1,4 +1,4 @@
-package com.braiso22.turnos.executions.presentation.same_type
+package com.braiso22.turnos.executions.presentation.task_executions.components
 
 
 import androidx.compose.foundation.layout.Arrangement
@@ -45,8 +45,8 @@ fun SameTypeExecutionComponent(
             user = state.userName,
             imageUrl = state.imageUrl,
             modifier = Modifier
-                .padding(8.dp)
         )
+        Spacer(Modifier.padding(8.dp))
         Column(
             Modifier
                 .weight(1f)
@@ -76,19 +76,16 @@ fun SameTypeExecutionComponent(
                 )
             }
         }
-        if (state.isConfirmed) {
-            Icon(
-                imageVector = Icons.Outlined.CheckBox,
-                contentDescription = null,
-                modifier = Modifier.padding(8.dp)
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Default.CheckBoxOutlineBlank,
-                contentDescription = null,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
+
+        Icon(
+            imageVector = if (state.isConfirmed) {
+                Icons.Outlined.CheckBox
+            } else {
+                Icons.Default.CheckBoxOutlineBlank
+            },
+            contentDescription = null,
+            modifier = Modifier.padding(8.dp)
+        )
     }
 }
 

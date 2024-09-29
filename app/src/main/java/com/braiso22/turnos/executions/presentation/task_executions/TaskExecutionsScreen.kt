@@ -1,4 +1,4 @@
-package com.braiso22.turnos.tasks.presentation.detail
+package com.braiso22.turnos.executions.presentation.task_executions
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -23,40 +25,59 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.braiso22.turnos.R
-import com.braiso22.turnos.executions.presentation.same_type.ExecutionUiState
-import com.braiso22.turnos.executions.presentation.same_type.SameTypeExecutionListComponent
+import com.braiso22.turnos.executions.presentation.task_executions.components.ExecutionUiState
+import com.braiso22.turnos.executions.presentation.task_executions.components.SameTypeExecutionListComponent
+import com.braiso22.turnos.ui.theme.TurnosTheme
 
 @Composable
-fun TaskDetailScreen(
+fun TaskExecutionsScreen(
     id: String,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TaskDetailViewModel = hiltViewModel(),
+    viewModel: TaskExecutionsViewModel = hiltViewModel(),
 ) {
+    val snackbarHostState = SnackbarHostState()
+    val context = LocalContext.current
     LaunchedEffect(id) {
         viewModel.onInit(id)
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                TaskExecutionsViewModel.UiEvent.NavigateBack -> {
+                    navigateBack()
+                }
+
+                TaskExecutionsViewModel.UiEvent.ShowError -> {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.couldn_t_add_execution)
+                    )
+                }
+            }
+        }
     }
 
     val executions by viewModel.executions.collectAsState()
-    TaskDetailScreenComponent(
+    TaskExecutionsScreenComponent(
         executions = executions,
-        navigateBack = navigateBack,
+        navigateBack = { viewModel.clickBack() },
         onClickNew = { viewModel.onClickNew(id) },
+        hostState = snackbarHostState,
         modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskDetailScreenComponent(
+fun TaskExecutionsScreenComponent(
     executions: List<ExecutionUiState>,
     navigateBack: () -> Unit,
     onClickNew: () -> Unit,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -80,6 +101,9 @@ fun TaskDetailScreenComponent(
                 }
 
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState)
         },
         modifier = modifier,
     ) { paddingValues ->
@@ -112,21 +136,24 @@ fun TaskDetailScreenComponent(
 
 @Preview(showBackground = true)
 @Composable
-private fun TaskDetailScreenComponentPreview() {
-    TaskDetailScreenComponent(
-        executions = List(10) {
-            ExecutionUiState(
-                id = "dolor",
-                imageUrl = null,
-                userName = "Chrystal Hodges",
-                date = "salutatus",
-                time = "bibendum",
-                isConfirmed = false
+private fun TaskExecutionsScreenComponentPreview() {
+    TurnosTheme {
+        TaskExecutionsScreenComponent(
+            executions = List(10) {
+                ExecutionUiState(
+                    id = "dolor",
+                    imageUrl = null,
+                    userName = "Chrystal Hodges",
+                    date = "salutatus",
+                    time = "bibendum",
+                    isConfirmed = false
 
-            )
-        },
-        navigateBack = {},
-        onClickNew = {},
-        modifier = Modifier.fillMaxSize()
-    )
+                )
+            },
+            navigateBack = {},
+            onClickNew = {},
+            hostState = SnackbarHostState(),
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }

@@ -38,6 +38,8 @@ fun OpenReceiptsScreen(
     viewModel: OpenReceiptsViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(true) {
+        viewModel.onInit()
+
         viewModel.eventFlow.collect { event ->
             when (event) {
                 OpenReceiptsViewModel.UiEvent.NavigateToHistory -> {
@@ -86,7 +88,7 @@ fun OpenReceiptsScreenComponent(
                 },
                 actions = {
                     IconButton(
-                        onClick = {onEvent(OpenReceiptEvent.OnClickHistory) }
+                        onClick = { onEvent(OpenReceiptEvent.OnClickHistory) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.History,

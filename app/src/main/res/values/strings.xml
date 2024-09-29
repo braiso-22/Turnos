@@ -26,4 +26,8 @@
     <string name="select">Select</string>
     <string name="user_name">Username</string>
     <string name="select_other_username">Select other username</string>
+    <string name="couldn_t_add_execution">Couldn\'t add execution</string>
+    <string name="confirm">Confirm</string>
+    <string name="edition_of_tasks_not_implemented">Edition of tasks not implemented</string>
+    <string name="edit_task">Edit task</string>
 </resources>

@@ -2,7 +2,8 @@ package com.braiso22.turnos.tasks.presentation.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.braiso22.turnos.tasks.domain.TasksRepository
+import com.braiso22.turnos.tasks.domain.GetTasks
+import com.braiso22.turnos.tasks.domain.SyncTasks
 import com.braiso22.turnos.tasks.presentation.list.components.TaskUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
-    private val tasksRepository: TasksRepository,
+    private val syncTasks: SyncTasks,
+    private val getTasks: GetTasks,
 ) : ViewModel() {
     private var realTasks = MutableStateFlow<List<TaskUiState>>(emptyList())
 
@@ -38,7 +40,10 @@ class TaskListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            tasksRepository.getTasks().collect { tasks ->
+            syncTasks()
+        }
+        viewModelScope.launch {
+            getTasks().collect { tasks ->
                 realTasks.update {
                     tasks.map { task ->
                         TaskUiState(

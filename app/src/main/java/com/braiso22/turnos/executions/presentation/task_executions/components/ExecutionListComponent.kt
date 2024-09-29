@@ -1,4 +1,4 @@
-package com.braiso22.turnos.executions.presentation.same_type
+package com.braiso22.turnos.executions.presentation.task_executions.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +37,12 @@ fun SameTypeExecutionListComponent(
             }
         }
         items(state) {
-            SameTypeExecutionComponent(state = it, modifier = Modifier.fillMaxWidth())
+            SameTypeExecutionComponent(
+                state = it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
         }
     }
 }

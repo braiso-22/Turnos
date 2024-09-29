@@ -1,8 +1,8 @@
-package com.braiso22.turnos.users.data
+package com.braiso22.turnos.users.data.net.firebase
 
 import com.braiso22.turnos.users.domain.User
 
-data class UserDto(
+data class UserFirebase(
     val id: String = "",
     val email: String = "",
     val username: String = "",

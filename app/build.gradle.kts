@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.daggerHilt)
+    alias(libs.plugins.room)
     id("com.google.gms.google-services")
 }
 
@@ -22,6 +23,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     buildTypes {
@@ -88,14 +92,26 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
 
+    // room
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.rxjava2)
+    implementation(libs.androidx.room.rxjava3)
+    implementation(libs.androidx.room.guava)
+    implementation(libs.androidx.room.paging)
+
     // HiltTesting
     testImplementation(libs.dagger.android.testing)
+
+    // Room testing
+    testImplementation(libs.androidx.room.testing)
 
     testImplementation(libs.junit)
 
     // Hilt Testing
     androidTestImplementation(libs.dagger.android.testing)
     ksp(libs.dagger.android.compiler)
+
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

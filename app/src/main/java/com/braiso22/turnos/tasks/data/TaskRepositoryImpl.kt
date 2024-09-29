@@ -3,6 +3,8 @@ package com.braiso22.turnos.tasks.data
 import android.util.Log
 import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.common.TASKS_COLLECTION
+import com.braiso22.turnos.tasks.data.local.TaskDao
+import com.braiso22.turnos.tasks.data.local.toEntity
 import com.braiso22.turnos.tasks.domain.Task
 import com.braiso22.turnos.tasks.domain.TasksRepository
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.map
 
 class TaskRepositoryImpl(
     private val firebaseDB: FirebaseFirestore,
+    private val taskDao: TaskDao,
 ) : TasksRepository {
 
     private val TAG = "TaskRepositoryImpl"
@@ -36,11 +39,27 @@ class TaskRepositoryImpl(
         }
     }
 
-    override fun getTasks(): Flow<List<Task>> {
+    override fun listenOnlineTasks(): Flow<List<Task>> {
         return firebaseDB.collection(TASKS_COLLECTION).snapshots().map {
             it.toObjects(TaskDto::class.java).map { taskDto ->
                 taskDto.toDomain()
             }
         }
+    }
+
+    override suspend fun syncTasks(tasks: List<Task>) {
+        taskDao.insertAll(
+            tasks.map { it.toEntity() }
+        )
+    }
+
+    override fun getTasks(): Flow<List<Task>> {
+        return taskDao.getAll().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun getTaskById(taskId: String): Task? {
+        return taskDao.getById(taskId)?.toDomain()
     }
 }
