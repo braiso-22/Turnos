@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.braiso22.turnos.common.Resource
 import com.braiso22.turnos.users.domain.CreateUser
+import com.braiso22.turnos.users.domain.SyncUsers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SelectUserViewModel @Inject constructor(
     private val createUser: CreateUser,
+    private val syncUsers: SyncUsers,
 ) : ViewModel() {
     private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
@@ -26,6 +28,12 @@ class SelectUserViewModel @Inject constructor(
     sealed class UiEvent {
         data object OnRegister : UiEvent()
         data object OnBadRegister : UiEvent()
+    }
+
+    init {
+        viewModelScope.launch {
+            syncUsers()
+        }
     }
 
     private val _isLoading = MutableStateFlow(false)

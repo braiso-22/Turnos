@@ -1,5 +1,6 @@
 package com.braiso22.turnos.executions.presentation.open_executions
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.braiso22.turnos.common.Resource
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +24,6 @@ class OpenReceiptsViewModel @Inject constructor(
     private val getOpenExecutionsByUserId: GetOpenExecutions,
     private val confirmExecution: ConfirmExecution,
     private val syncExecutions: SyncExecutions,
-    private val syncUsers: SyncUsers,
 ) : ViewModel() {
     private val _receipts = MutableStateFlow<Map<String, List<ReceiptUiState>>>(emptyMap())
     val receipts = _receipts.asStateFlow()
@@ -37,13 +38,12 @@ class OpenReceiptsViewModel @Inject constructor(
 
     fun onInit() {
         viewModelScope.launch {
-            syncUsers()
-        }
-        viewModelScope.launch {
             syncExecutions()
         }
         viewModelScope.launch {
-            getOpenExecutionsByUserId().collect { executions ->
+            getOpenExecutionsByUserId().catch {
+                Log.i("OpenReceiptsViewModel", "onInit: ${it.message}")
+            }.collect { executions ->
                 _receipts.update { _ ->
                     executions.groupBy {
                         it.execution.dateTime.toLocalDate().toString()

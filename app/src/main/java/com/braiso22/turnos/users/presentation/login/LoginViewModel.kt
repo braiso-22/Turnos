@@ -3,6 +3,7 @@ package com.braiso22.turnos.users.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.braiso22.turnos.common.Resource
+import com.braiso22.turnos.users.domain.SyncUsers
 import com.braiso22.turnos.users.domain.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: UserRepository,
+    private val syncUsers: SyncUsers,
 ) : ViewModel() {
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
@@ -35,6 +37,12 @@ class LoginViewModel @Inject constructor(
         data object NoInternet : UiEvent()
         data object OnLogin : UiEvent()
         data object OnRegister : UiEvent()
+    }
+
+    init {
+        viewModelScope.launch {
+            syncUsers()
+        }
     }
 
     fun onEvent(event: LoginScreenEvent) {
