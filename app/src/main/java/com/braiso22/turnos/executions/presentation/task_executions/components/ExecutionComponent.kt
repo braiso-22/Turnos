@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.outlined.CheckBox
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.PendingActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +25,7 @@ import com.braiso22.turnos.ui.theme.TurnosTheme
 data class ExecutionUiState(
     val id: String,
     val imageUrl: String? = null,
+    val userId: String = "",
     val userName: String,
     val date: String,
     val time: String,
@@ -79,9 +80,9 @@ fun SameTypeExecutionComponent(
 
         Icon(
             imageVector = if (state.isConfirmed) {
-                Icons.Outlined.CheckBox
+                Icons.Filled.CheckCircle
             } else {
-                Icons.Default.CheckBoxOutlineBlank
+                Icons.Default.PendingActions
             },
             contentDescription = null,
             modifier = Modifier.padding(8.dp)

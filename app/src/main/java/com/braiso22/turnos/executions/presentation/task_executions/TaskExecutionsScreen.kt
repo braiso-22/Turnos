@@ -1,13 +1,17 @@
 package com.braiso22.turnos.executions.presentation.task_executions
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.braiso22.turnos.R
 import com.braiso22.turnos.executions.presentation.task_executions.components.ExecutionUiState
 import com.braiso22.turnos.executions.presentation.task_executions.components.SameTypeExecutionListComponent
+import com.braiso22.turnos.executions.presentation.task_executions.state.UserExecutions
 import com.braiso22.turnos.ui.theme.TurnosTheme
 
 @Composable
@@ -62,8 +66,11 @@ fun TaskExecutionsScreen(
     }
 
     val executions by viewModel.executions.collectAsState()
+    val userExecutions by viewModel.userExecutions.collectAsState()
     TaskExecutionsScreenComponent(
         executions = executions,
+        userExecutions = userExecutions,
+        onClickFilter = { viewModel.onClickFilter(it) },
         navigateBack = { viewModel.clickBack() },
         onClickNew = { viewModel.onClickNew(id) },
         hostState = snackbarHostState,
@@ -75,6 +82,8 @@ fun TaskExecutionsScreen(
 @Composable
 fun TaskExecutionsScreenComponent(
     executions: List<ExecutionUiState>,
+    userExecutions: List<UserExecutions>,
+    onClickFilter: (String) -> Unit,
     navigateBack: () -> Unit,
     onClickNew: () -> Unit,
     hostState: SnackbarHostState,
@@ -107,12 +116,27 @@ fun TaskExecutionsScreenComponent(
         },
         modifier = modifier,
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
+        Column(modifier = Modifier.padding(paddingValues)) {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                items(userExecutions) {
+                    FilterChip(
+                        selected = it.selected,
+                        onClick = { onClickFilter(it.userId) },
+                        label = {
+                            Text(text = "${it.username}: ${it.executions}")
+                        },
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
+            }
+            HorizontalDivider()
             SameTypeExecutionListComponent(
                 state = executions,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 64.dp)
+                modifier = Modifier.weight(1f)
             )
             var isEnabled by rememberSaveable {
                 mutableStateOf(true)
@@ -123,7 +147,6 @@ fun TaskExecutionsScreenComponent(
                     isEnabled = false
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(8.dp),
                 enabled = isEnabled
@@ -150,8 +173,17 @@ private fun TaskExecutionsScreenComponentPreview() {
 
                 )
             },
+            userExecutions = List(10) {
+                UserExecutions(
+                    username = "Braiso22",
+                    userId = "dolor",
+                    executions = 10,
+                    selected = false,
+                )
+            },
             navigateBack = {},
             onClickNew = {},
+            onClickFilter = {},
             hostState = SnackbarHostState(),
             modifier = Modifier.fillMaxSize()
         )
