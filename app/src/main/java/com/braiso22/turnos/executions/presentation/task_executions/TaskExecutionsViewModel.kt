@@ -31,10 +31,16 @@ class TaskExecutionsViewModel @Inject constructor(
     private val syncUsers: SyncUsers,
     private val syncExecutions: SyncExecutions,
 ) : ViewModel() {
-    private val _executions = MutableStateFlow<List<ExecutionUiState>>(emptyList())
-    val executions = _executions.asStateFlow()
-
     private val _selectedUserIds = MutableStateFlow<Set<String>>(emptySet())
+
+    private val _executions = MutableStateFlow<List<ExecutionUiState>>(emptyList())
+    val executions = combine(_executions, _selectedUserIds) { executions, selectedIds ->
+        executions.filter { selectedIds.isEmpty() || selectedIds.contains(it.userId) }
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     val userExecutions = combine(_executions, _selectedUserIds) { executions, selectedIds ->
         executions.filter { it.isConfirmed }
