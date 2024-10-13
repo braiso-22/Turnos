@@ -8,6 +8,7 @@
 - firebase
 - confirmar ejecuciones
 - ver en detalle de tarea el numero de ejecuciones por persona
+- filtrar las ejecuciones de una tarea por usuario
 
 ## Por hacer
 - crear grupos
