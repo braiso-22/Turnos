@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
     fun onEvent(event: LoginScreenEvent) {
         when (event) {
             is LoginScreenEvent.OnEmailChange -> {
-                _email.update { event.email }
+                _email.update { event.email.trim() }
             }
 
             LoginScreenEvent.OnLogin -> {
